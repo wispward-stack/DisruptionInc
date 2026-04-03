@@ -185,12 +185,12 @@
         const companies = data.companies.map(c => ({
             ...c,
             disruptionScore: +(
-                c.domainExpertiseOverlap * 0.20 +
-                c.smallBusinessExposure * 0.15 +
-                (10 - c.standardSetterDefensibility) * 0.15 +
-                c.aiCompetitorPressure * 0.20 +
-                (10 - c.switchingCost) * 0.15 +
-                (10 - c.workflowComplexity) * 0.15
+                (c.domainExpertiseOverlap || 0) * 0.20 +
+                (c.smallBusinessExposure || 0) * 0.15 +
+                (10 - (c.standardSetterDefensibility || 0)) * 0.15 +
+                (c.aiCompetitorPressure || 0) * 0.20 +
+                (10 - (c.switchingCost || 0)) * 0.15 +
+                (10 - (c.workflowComplexity || 0)) * 0.15
             ).toFixed(2)
         }));
 
@@ -219,8 +219,10 @@
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        // Y scale: disruption score
-        const yDomain = [2, 8.5];
+        // Y scale: disruption score (dynamic domain from actual data with padding)
+        const scoreExtent = d3.extent(companies, d => d.disruptionScore);
+        const scorePad = (scoreExtent[1] - scoreExtent[0]) * 0.15;
+        const yDomain = [Math.max(0, scoreExtent[0] - scorePad), scoreExtent[1] + scorePad];
         const y = d3.scaleLinear().domain(yDomain).range([height, 0]);
 
         // Y axis
