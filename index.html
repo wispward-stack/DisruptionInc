@@ -185,9 +185,12 @@
         const companies = data.companies.map(c => ({
             ...c,
             disruptionScore: +(
-                c.domainExpertiseOverlap * 0.45 +
-                c.smallBusinessExposure * 0.30 +
-                (10 - c.standardSetterDefensibility) * 0.25
+                c.domainExpertiseOverlap * 0.20 +
+                c.smallBusinessExposure * 0.15 +
+                (10 - c.standardSetterDefensibility) * 0.15 +
+                c.aiCompetitorPressure * 0.20 +
+                (10 - c.switchingCost) * 0.15 +
+                (10 - c.workflowComplexity) * 0.15
             ).toFixed(2)
         }));
 
@@ -329,6 +332,9 @@
                 <div class="score-row"><span class="score-label">Domain Expertise Overlap</span><span class="score-value">${d.domainExpertiseOverlap}/10</span></div>
                 <div class="score-row"><span class="score-label">SMB Exposure</span><span class="score-value">${d.smallBusinessExposure}/10</span></div>
                 <div class="score-row"><span class="score-label">Standard-Setter Defensibility</span><span class="score-value">${d.standardSetterDefensibility}/10</span></div>
+                <div class="score-row"><span class="score-label">AI Competitor Pressure</span><span class="score-value">${d.aiCompetitorPressure}/10</span></div>
+                <div class="score-row"><span class="score-label">Switching Cost</span><span class="score-value">${d.switchingCost}/10</span></div>
+                <div class="score-row"><span class="score-label">Workflow Complexity</span><span class="score-value">${d.workflowComplexity}/10</span></div>
                 <div class="score-row composite"><span class="score-label">Disruption Score</span><span class="score-value" style="color: ${scoreColor}">${d.disruptionScore}/10</span></div>
                 <div class="reasoning">${d.reasoning}</div>
             `);

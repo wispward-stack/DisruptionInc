@@ -1,27 +1,51 @@
 {
   "metadata": {
-    "version": "1.0",
+    "version": "2.0",
     "date": "2026-04-02",
     "methodology": {
-      "description": "Each SaaS company is scored on three disruption factors (1-10 scale). The composite Disruption Score is a weighted average.",
+      "description": "Each SaaS company is scored on six disruption factors (1-10 scale). The composite Disruption Score is a weighted average.",
       "factors": {
         "domainExpertiseOverlap": {
-          "weight": 0.45,
+          "abbreviation": "DEO",
+          "weight": 0.20,
           "description": "How much domain expertise do end users have in the area the software serves? Higher = users can more easily build AI alternatives. 10 = users are developers/technical experts who could vibe-code replacements. 1 = users have no technical ability to create alternatives.",
           "examples": "Atlassian (9): devs use it and can build alternatives. Veeva (2): pharma compliance users lack software skills."
         },
         "smallBusinessExposure": {
-          "weight": 0.30,
+          "abbreviation": "SBE",
+          "weight": 0.15,
           "description": "What fraction of revenue comes from small businesses vs enterprises? Higher = more SMB exposure = higher disruption risk (SMBs more likely to switch to AI-native tools). 10 = almost entirely SMB. 1 = almost entirely large enterprise.",
           "examples": "Squarespace (9): mostly small businesses. Workday (2): large enterprises."
         },
         "standardSetterDefensibility": {
-          "weight": 0.25,
+          "abbreviation": "SSD",
+          "weight": 0.15,
+          "direction": "inverted",
           "description": "Is the company a de facto standard in its domain? Higher = more defensible = LOWER disruption risk. Score is inverted for the composite: 10 = strong standard setter (low risk), 1 = no standard-setting power (high risk).",
           "examples": "Adobe (9): Creative Suite is the standard. Freshworks (2): competes in crowded space with no standard-setting power."
+        },
+        "aiCompetitorPressure": {
+          "abbreviation": "AIC",
+          "weight": 0.20,
+          "description": "How much AI-native competitor pressure does the company face? Higher = more risk. 10 = multiple funded AI-native competitors directly replacing core product. 1 = no AI alternatives exist.",
+          "examples": "Canva (9): AI image generation directly competes. Veeva (2): no AI alternatives in pharma compliance."
+        },
+        "switchingCost": {
+          "abbreviation": "SC",
+          "weight": 0.15,
+          "direction": "inverted",
+          "description": "How high are switching costs? Higher = more lock-in = LOWER disruption risk. Score is inverted for the composite: 10 = deep data/integration lock-in, migration is months of work. 1 = trivial to switch, no data portability issues.",
+          "examples": "Veeva (10): regulatory data creates massive lock-in. Canva (2): near-zero switching cost."
+        },
+        "workflowComplexity": {
+          "abbreviation": "WC",
+          "weight": 0.15,
+          "direction": "inverted",
+          "description": "How complex are the workflows embedded in org processes? Higher = more complexity = LOWER disruption risk. Score is inverted for the composite: 10 = complex multi-step workflows embedded in org processes. 1 = single-step or commodity task.",
+          "examples": "Veeva (10): FDA-regulated workflows are extremely complex. Zoom (2): video calls are single-step commodity."
         }
       },
-      "compositeFormula": "disruptionScore = (domainExpertiseOverlap * 0.45) + (smallBusinessExposure * 0.30) + ((10 - standardSetterDefensibility) * 0.25)",
+      "compositeFormula": "disruptionScore = (DEO * 0.20) + (SBE * 0.15) + ((10 - SSD) * 0.15) + (AIC * 0.20) + ((10 - SC) * 0.15) + ((10 - WC) * 0.15)",
       "interpretation": "Higher composite score = more vulnerable to AI disruption. Range: 1-10."
     }
   },
@@ -33,7 +57,10 @@
       "domainExpertiseOverlap": 9,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 6,
-      "reasoning": "End users are developers who can build alternatives. Mix of SMB and enterprise. Jira is a near-standard but alternatives exist."
+      "aiCompetitorPressure": 6,
+      "switchingCost": 8,
+      "workflowComplexity": 7,
+      "reasoning": "End users are developers who can build alternatives. Mix of SMB and enterprise. Jira is a near-standard but alternatives exist. AI coding assistants compete on dev workflow but Jira/Confluence have deep project history lock-in and complex cross-team workflows."
     },
     {
       "name": "Salesforce",
@@ -42,7 +69,10 @@
       "domainExpertiseOverlap": 4,
       "smallBusinessExposure": 3,
       "standardSetterDefensibility": 9,
-      "reasoning": "Sales reps aren't builders. Heavily enterprise. CRM category leader and platform standard."
+      "aiCompetitorPressure": 5,
+      "switchingCost": 9,
+      "workflowComplexity": 9,
+      "reasoning": "Sales reps aren't builders. Heavily enterprise. CRM category leader and platform standard. AI CRM tools emerging but immature. Massive data/integration lock-in. Complex multi-department workflows."
     },
     {
       "name": "Adobe",
@@ -51,7 +81,10 @@
       "domainExpertiseOverlap": 6,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 9,
-      "reasoning": "Designers are creative but not coders. Mixed customer base. Photoshop/Illustrator are the standard."
+      "aiCompetitorPressure": 8,
+      "switchingCost": 6,
+      "workflowComplexity": 5,
+      "reasoning": "Designers are creative but not coders. Mixed customer base. Photoshop/Illustrator are the standard. AI image generation (Midjourney, DALL-E, Firefly) directly compete. Moderate format lock-in. Creative tasks are project-based, not workflow-heavy."
     },
     {
       "name": "Shopify",
@@ -60,7 +93,10 @@
       "domainExpertiseOverlap": 5,
       "smallBusinessExposure": 9,
       "standardSetterDefensibility": 7,
-      "reasoning": "Merchants are business-savvy but not technical. Heavily SMB. Strong brand but Wix/Squarespace compete."
+      "aiCompetitorPressure": 6,
+      "switchingCost": 7,
+      "workflowComplexity": 7,
+      "reasoning": "Merchants are business-savvy but not technical. Heavily SMB. Strong brand but Wix/Squarespace compete. AI store builders emerging. Merchant data/payment integrations create lock-in. Order management is moderately complex."
     },
     {
       "name": "Workday",
@@ -69,7 +105,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 1,
       "standardSetterDefensibility": 7,
-      "reasoning": "HR users aren't technical. Almost entirely large enterprise. Strong position in enterprise HCM."
+      "aiCompetitorPressure": 3,
+      "switchingCost": 9,
+      "workflowComplexity": 10,
+      "reasoning": "HR users aren't technical. Almost entirely large enterprise. Strong position in enterprise HCM. Few AI alternatives for enterprise HCM/finance. Deep payroll/benefits/compliance integrations. Extremely complex regulated workflows."
     },
     {
       "name": "ServiceNow",
@@ -78,7 +117,10 @@
       "domainExpertiseOverlap": 7,
       "smallBusinessExposure": 2,
       "standardSetterDefensibility": 8,
-      "reasoning": "IT admins are technical. Very enterprise-heavy. ITSM standard in large orgs."
+      "aiCompetitorPressure": 4,
+      "switchingCost": 9,
+      "workflowComplexity": 9,
+      "reasoning": "IT admins are technical. Very enterprise-heavy. ITSM standard in large orgs. Limited AI ITSM alternatives. Deep enterprise integrations. Complex multi-tier approval and escalation workflows."
     },
     {
       "name": "Datadog",
@@ -87,7 +129,10 @@
       "domainExpertiseOverlap": 9,
       "smallBusinessExposure": 4,
       "standardSetterDefensibility": 6,
-      "reasoning": "DevOps engineers are highly technical. Mix but enterprise-leaning. Strong but Grafana/New Relic compete."
+      "aiCompetitorPressure": 5,
+      "switchingCost": 7,
+      "workflowComplexity": 6,
+      "reasoning": "DevOps engineers are highly technical. Mix but enterprise-leaning. Strong but Grafana/New Relic compete. AI observability tools emerging. Dashboard/alert config creates moderate lock-in. Monitoring workflows are structured but not deeply complex."
     },
     {
       "name": "Snowflake",
@@ -96,7 +141,10 @@
       "domainExpertiseOverlap": 8,
       "smallBusinessExposure": 3,
       "standardSetterDefensibility": 6,
-      "reasoning": "Data engineers are very technical. Enterprise-heavy. Strong but Databricks/BigQuery compete."
+      "aiCompetitorPressure": 4,
+      "switchingCost": 8,
+      "workflowComplexity": 7,
+      "reasoning": "Data engineers are very technical. Enterprise-heavy. Strong but Databricks/BigQuery compete. Few AI alternatives to data warehousing. Large data volume migration is painful. ETL pipelines and governance workflows are complex."
     },
     {
       "name": "HubSpot",
@@ -105,7 +153,10 @@
       "domainExpertiseOverlap": 5,
       "smallBusinessExposure": 8,
       "standardSetterDefensibility": 5,
-      "reasoning": "Marketers are savvy but not builders. SMB-focused. Strong in SMB CRM but not a standard."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 5,
+      "workflowComplexity": 5,
+      "reasoning": "Marketers are savvy but not builders. SMB-focused. Strong in SMB CRM but not a standard. AI marketing/sales tools (Jasper, Clay, etc.) compete directly. Moderate contact data lock-in. Workflows are templated, not deeply complex."
     },
     {
       "name": "Twilio",
@@ -114,7 +165,10 @@
       "domainExpertiseOverlap": 10,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 6,
-      "reasoning": "Users are developers building on the API. Mixed customer base. Leading API but competitors exist."
+      "aiCompetitorPressure": 5,
+      "switchingCost": 6,
+      "workflowComplexity": 4,
+      "reasoning": "Users are developers building on the API. Mixed customer base. Leading API but competitors exist. Some AI communication alternatives but API-level. Code integration creates lock-in. Communications APIs are functional, not workflow-heavy."
     },
     {
       "name": "Zoom",
@@ -123,7 +177,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 6,
       "standardSetterDefensibility": 6,
-      "reasoning": "End users are non-technical. Broad customer base. Well-known but Teams/Meet compete hard."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 2,
+      "workflowComplexity": 2,
+      "reasoning": "End users are non-technical. Broad customer base. Well-known but Teams/Meet compete hard. AI meeting tools (Otter, Fireflies, Recall) directly compete. Near-zero switching cost. Video calls are single-step commodity."
     },
     {
       "name": "Cloudflare",
@@ -132,7 +189,10 @@
       "domainExpertiseOverlap": 9,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 7,
-      "reasoning": "DevOps/infra engineers are highly technical. Mix of SMB and enterprise. Strong edge platform."
+      "aiCompetitorPressure": 3,
+      "switchingCost": 9,
+      "workflowComplexity": 6,
+      "reasoning": "DevOps/infra engineers are highly technical. Mix of SMB and enterprise. Strong edge platform. Few AI alternatives to edge/CDN/security infra. DNS, SSL, WAF rules deeply integrated. Security config is moderately complex."
     },
     {
       "name": "MongoDB",
@@ -141,7 +201,10 @@
       "domainExpertiseOverlap": 10,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 6,
-      "reasoning": "Users are developers. Mixed customer base. Popular but Postgres/DynamoDB compete."
+      "aiCompetitorPressure": 4,
+      "switchingCost": 8,
+      "workflowComplexity": 5,
+      "reasoning": "Users are developers. Mixed customer base. Popular but Postgres/DynamoDB compete. No AI database replacement. Database migration is very painful. Queries are functional, not workflow-heavy."
     },
     {
       "name": "Figma",
@@ -150,7 +213,10 @@
       "domainExpertiseOverlap": 5,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 7,
-      "reasoning": "Designers creative but not coders. Mixed base. Becoming the design collaboration standard."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 5,
+      "workflowComplexity": 4,
+      "reasoning": "Designers creative but not coders. Mixed base. Becoming the design collaboration standard. AI design tools (Galileo, Uizard) emerging fast. Some design system lock-in. Design tasks are project-based, relatively simple."
     },
     {
       "name": "Notion",
@@ -159,7 +225,10 @@
       "domainExpertiseOverlap": 6,
       "smallBusinessExposure": 7,
       "standardSetterDefensibility": 4,
-      "reasoning": "Tech-savvy users but not all builders. SMB-leaning. Popular but Google Docs/Confluence compete."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 4,
+      "workflowComplexity": 4,
+      "reasoning": "Tech-savvy users but not all builders. SMB-leaning. Popular but Google Docs/Confluence compete. AI productivity tools (Mem, Coda AI, etc.) compete. Moderate content lock-in. Docs/wikis are lightly structured."
     },
     {
       "name": "Canva",
@@ -168,7 +237,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 9,
       "standardSetterDefensibility": 5,
-      "reasoning": "Non-designers using templates. Very SMB. Strong brand but AI image tools are direct competitors."
+      "aiCompetitorPressure": 9,
+      "switchingCost": 2,
+      "workflowComplexity": 2,
+      "reasoning": "Non-designers using templates. Very SMB. Strong brand but AI image tools are direct competitors. AI image generation directly replaces core use case. No meaningful lock-in. Design tasks are single-step, template-based."
     },
     {
       "name": "Squarespace",
@@ -177,7 +249,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 9,
       "standardSetterDefensibility": 4,
-      "reasoning": "Non-technical users building websites. Almost all SMB. No standard-setting power."
+      "aiCompetitorPressure": 8,
+      "switchingCost": 3,
+      "workflowComplexity": 3,
+      "reasoning": "Non-technical users building websites. Almost all SMB. No standard-setting power. AI website builders (Durable, 10Web, Framer AI) directly compete. Some content lock-in. Website building is simple."
     },
     {
       "name": "GitLab",
@@ -186,7 +261,10 @@
       "domainExpertiseOverlap": 10,
       "smallBusinessExposure": 4,
       "standardSetterDefensibility": 5,
-      "reasoning": "Pure developer tool. Mix but enterprise-leaning. Competes with GitHub."
+      "aiCompetitorPressure": 6,
+      "switchingCost": 7,
+      "workflowComplexity": 7,
+      "reasoning": "Pure developer tool. Mix but enterprise-leaning. Competes with GitHub. AI coding tools compete on CI/CD and code review. Repo history and pipeline config create lock-in. DevOps pipelines are complex."
     },
     {
       "name": "Veeva Systems",
@@ -195,7 +273,10 @@
       "domainExpertiseOverlap": 2,
       "smallBusinessExposure": 1,
       "standardSetterDefensibility": 9,
-      "reasoning": "Pharma/biotech compliance users aren't technical. All enterprise. Dominant in life sciences vertical."
+      "aiCompetitorPressure": 2,
+      "switchingCost": 10,
+      "workflowComplexity": 10,
+      "reasoning": "Pharma/biotech compliance users aren't technical. All enterprise. Dominant in life sciences vertical. No AI alternatives in pharma compliance. Regulatory data creates massive lock-in. FDA-regulated workflows are extremely complex."
     },
     {
       "name": "Palantir",
@@ -204,7 +285,10 @@
       "domainExpertiseOverlap": 6,
       "smallBusinessExposure": 1,
       "standardSetterDefensibility": 8,
-      "reasoning": "Analysts are semi-technical. Government/enterprise only. Deep moat in defense/intel."
+      "aiCompetitorPressure": 2,
+      "switchingCost": 9,
+      "workflowComplexity": 9,
+      "reasoning": "Analysts are semi-technical. Government/enterprise only. Deep moat in defense/intel. No AI alternatives for defense/intel analytics at this scale. Classified data integrations. Complex analytical workflows with security clearance requirements."
     },
     {
       "name": "Freshworks",
@@ -213,7 +297,10 @@
       "domainExpertiseOverlap": 4,
       "smallBusinessExposure": 8,
       "standardSetterDefensibility": 2,
-      "reasoning": "Support agents aren't builders. SMB-heavy. No standard-setting power, crowded market."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 3,
+      "workflowComplexity": 4,
+      "reasoning": "Support agents aren't builders. SMB-heavy. No standard-setting power, crowded market. AI customer support tools directly compete. Low switching cost. Support workflows are templated."
     },
     {
       "name": "Asana",
@@ -222,7 +309,10 @@
       "domainExpertiseOverlap": 5,
       "smallBusinessExposure": 6,
       "standardSetterDefensibility": 3,
-      "reasoning": "Mixed user base, some technical. Mid-market focus. Competes with Monday, Jira, Notion."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 4,
+      "workflowComplexity": 4,
+      "reasoning": "Mixed user base, some technical. Mid-market focus. Competes with Monday, Jira, Notion. AI project management emerging. Moderate project data lock-in. Task management is lightly structured."
     },
     {
       "name": "DocuSign",
@@ -231,7 +321,10 @@
       "domainExpertiseOverlap": 2,
       "smallBusinessExposure": 5,
       "standardSetterDefensibility": 8,
-      "reasoning": "Users just sign documents. Mixed base. De facto e-signature standard."
+      "aiCompetitorPressure": 4,
+      "switchingCost": 6,
+      "workflowComplexity": 3,
+      "reasoning": "Users just sign documents. Mixed base. De facto e-signature standard. Limited AI e-signature alternatives. Compliance/audit trail lock-in. E-signing is a single-step task."
     },
     {
       "name": "Okta",
@@ -240,7 +333,10 @@
       "domainExpertiseOverlap": 8,
       "smallBusinessExposure": 3,
       "standardSetterDefensibility": 7,
-      "reasoning": "IT/security admins are technical. Enterprise-heavy. Strong in identity space."
+      "aiCompetitorPressure": 3,
+      "switchingCost": 8,
+      "workflowComplexity": 7,
+      "reasoning": "IT/security admins are technical. Enterprise-heavy. Strong in identity space. No AI identity alternatives. SSO/directory integrations deeply embedded. Access management policies are complex."
     },
     {
       "name": "Monday.com",
@@ -249,7 +345,10 @@
       "domainExpertiseOverlap": 4,
       "smallBusinessExposure": 7,
       "standardSetterDefensibility": 3,
-      "reasoning": "Non-technical project managers. SMB-leaning. No standard-setting power."
+      "aiCompetitorPressure": 7,
+      "switchingCost": 3,
+      "workflowComplexity": 4,
+      "reasoning": "Non-technical project managers. SMB-leaning. No standard-setting power. AI work management tools emerging. Low data lock-in. Workflows are simple board-based."
     },
     {
       "name": "Elastic",
@@ -258,7 +357,10 @@
       "domainExpertiseOverlap": 9,
       "smallBusinessExposure": 4,
       "standardSetterDefensibility": 6,
-      "reasoning": "Developers and DevOps engineers. Enterprise-leaning. Elasticsearch is well-known but open-source competitors exist."
+      "aiCompetitorPressure": 5,
+      "switchingCost": 7,
+      "workflowComplexity": 6,
+      "reasoning": "Developers and DevOps engineers. Enterprise-leaning. Elasticsearch is well-known but open-source competitors exist. AI search (vector DBs, semantic search) compete partially. Index data and dashboards create lock-in. Search/observability pipelines moderately complex."
     },
     {
       "name": "Wix",
@@ -267,7 +369,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 9,
       "standardSetterDefensibility": 4,
-      "reasoning": "Non-technical small business owners. Almost all SMB. No standard-setting power."
+      "aiCompetitorPressure": 8,
+      "switchingCost": 3,
+      "workflowComplexity": 3,
+      "reasoning": "Non-technical small business owners. Almost all SMB. No standard-setting power. AI website builders directly compete. Some content lock-in. Website building is simple."
     },
     {
       "name": "Zendesk",
@@ -276,7 +381,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 6,
       "standardSetterDefensibility": 5,
-      "reasoning": "Support agents aren't technical. Mixed base. Known brand but AI chatbots are direct competitors."
+      "aiCompetitorPressure": 8,
+      "switchingCost": 5,
+      "workflowComplexity": 5,
+      "reasoning": "Support agents aren't technical. Mixed base. Known brand but AI chatbots are direct competitors. AI chatbots (Intercom Fin, Ada) directly compete. Ticket history creates moderate lock-in. Support workflows are moderately structured."
     },
     {
       "name": "Confluent",
@@ -285,7 +393,10 @@
       "domainExpertiseOverlap": 10,
       "smallBusinessExposure": 2,
       "standardSetterDefensibility": 7,
-      "reasoning": "Pure developer/data engineer tool. Enterprise-heavy. Kafka is the standard but self-hosted is an option."
+      "aiCompetitorPressure": 3,
+      "switchingCost": 9,
+      "workflowComplexity": 8,
+      "reasoning": "Pure developer/data engineer tool. Enterprise-heavy. Kafka is the standard but self-hosted is an option. No AI alternative to data streaming. Kafka deeply embedded in data pipelines. Event-driven architectures are complex."
     },
     {
       "name": "UiPath",
@@ -294,7 +405,10 @@
       "domainExpertiseOverlap": 5,
       "smallBusinessExposure": 3,
       "standardSetterDefensibility": 5,
-      "reasoning": "Business analysts with some technical skill. Enterprise-heavy. RPA leader but AI agents are direct replacements."
+      "aiCompetitorPressure": 9,
+      "switchingCost": 5,
+      "workflowComplexity": 6,
+      "reasoning": "Business analysts with some technical skill. Enterprise-heavy. RPA leader but AI agents are direct replacements. AI agents are literal replacements for RPA. Moderate bot library lock-in. Automation workflows range from simple to moderately complex."
     },
     {
       "name": "Intuit",
@@ -303,7 +417,10 @@
       "domainExpertiseOverlap": 3,
       "smallBusinessExposure": 9,
       "standardSetterDefensibility": 8,
-      "reasoning": "Small business owners and individuals. Very SMB. QuickBooks/TurboTax are standards."
+      "aiCompetitorPressure": 5,
+      "switchingCost": 7,
+      "workflowComplexity": 6,
+      "reasoning": "Small business owners and individuals. Very SMB. QuickBooks/TurboTax are standards. AI bookkeeping tools emerging but tax/compliance is hard to disrupt. Financial data history creates lock-in. Tax workflows are structured and seasonal."
     },
     {
       "name": "Autodesk",
@@ -312,7 +429,10 @@
       "domainExpertiseOverlap": 6,
       "smallBusinessExposure": 4,
       "standardSetterDefensibility": 9,
-      "reasoning": "Engineers are technical but in physical domains. Mixed base. AutoCAD/Revit are industry standards."
+      "aiCompetitorPressure": 4,
+      "switchingCost": 8,
+      "workflowComplexity": 8,
+      "reasoning": "Engineers are technical but in physical domains. Mixed base. AutoCAD/Revit are industry standards. AI CAD tools emerging but immature for engineering. Large project files and format standards create lock-in. Engineering design workflows are deeply complex."
     }
   ]
 }
