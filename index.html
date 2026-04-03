@@ -16,28 +16,50 @@
         }
 
         header {
-            padding: 2rem 2rem 1rem;
-            max-width: 1200px;
+            padding: 2rem 2rem 0.5rem;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
         header h1 {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 700;
             color: #fff;
             margin-bottom: 0.3rem;
         }
 
         header p {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: #888;
             max-width: 700px;
             line-height: 1.5;
         }
 
+        .filter-bar {
+            max-width: 1000px;
+            margin: 0.8rem auto 0;
+            padding: 0 2rem;
+            font-size: 0.85rem;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            background: #1a1a2e;
+            color: #e0e0e0;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
         #chart-container {
-            max-width: 1200px;
-            margin: 1rem auto;
+            max-width: 1000px;
+            margin: 0.5rem auto;
             padding: 0 2rem;
         }
 
@@ -56,50 +78,53 @@
             stroke: #333;
         }
 
-        .grid line {
-            stroke: #1a1a2e;
-            stroke-dasharray: 2,4;
-        }
-
-        .grid path {
-            stroke: none;
-        }
-
         .axis-label {
             fill: #aaa;
             font-size: 13px;
             font-weight: 500;
         }
 
-        .company-dot {
-            cursor: pointer;
-            transition: r 0.15s ease;
+        .axis-note {
+            fill: #666;
+            font-size: 11px;
+            font-style: italic;
         }
 
-        .company-dot:hover {
-            filter: brightness(1.3);
+        .company-bubble {
+            cursor: pointer;
+            transition: opacity 0.2s ease;
         }
 
         .company-label {
             fill: #ccc;
-            font-size: 11px;
+            font-size: 10px;
             pointer-events: none;
-            text-anchor: middle;
+        }
+
+        .mean-label {
+            fill: #888;
+            font-size: 11px;
+            font-style: italic;
         }
 
         .tooltip {
             position: absolute;
             background: #1a1a2e;
-            border: 1px solid #333;
+            border: 1px solid #444;
             border-radius: 8px;
-            padding: 12px 16px;
+            padding: 14px 18px;
             font-size: 13px;
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.15s;
             max-width: 320px;
             z-index: 100;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        }
+
+        .tooltip.pinned {
+            pointer-events: auto;
+            opacity: 1;
         }
 
         .tooltip h3 {
@@ -138,104 +163,21 @@
             font-size: 12px;
             line-height: 1.4;
         }
-
-        .legend {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.5rem 2rem 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .legend-title {
-            font-size: 12px;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-right: 0.5rem;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: #aaa;
-        }
-
-        .legend-swatch {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .methodology {
-            max-width: 1200px;
-            margin: 1rem auto 2rem;
-            padding: 0 2rem;
-        }
-
-        .methodology details {
-            background: #111;
-            border: 1px solid #222;
-            border-radius: 8px;
-            padding: 1rem 1.2rem;
-        }
-
-        .methodology summary {
-            cursor: pointer;
-            color: #888;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .methodology .content {
-            margin-top: 1rem;
-            color: #777;
-            font-size: 13px;
-            line-height: 1.6;
-        }
-
-        .methodology .content h4 {
-            color: #aaa;
-            margin: 0.8rem 0 0.3rem;
-            font-size: 13px;
-        }
-
-        .zone-label {
-            fill: #333;
-            font-size: 11px;
-            font-style: italic;
-        }
     </style>
 </head>
 <body>
     <header>
-        <h1>SaaS AI Disruption Index</h1>
-        <p>How vulnerable are major SaaS companies to AI disruption? A composite score based on end-user domain expertise, customer size distribution, and standard-setter defensibility.</p>
+        <h1>How vulnerable is a SaaS company to AI disruption?</h1>
+        <p>The disruption index captures the potential for displacement through generative AI.</p>
     </header>
 
-    <div class="legend" id="legend"></div>
+    <div class="filter-bar">
+        <span>To explore, select a category and click on the bubbles:</span>
+        <select id="category-filter"><option value="All">All</option></select>
+    </div>
+
     <div id="chart-container"></div>
     <div class="tooltip" id="tooltip"></div>
-
-    <div class="methodology">
-        <details>
-            <summary>Methodology</summary>
-            <div class="content">
-                <h4>Three Disruption Factors (1-10 scale)</h4>
-                <p><strong>Domain Expertise Overlap (45% weight):</strong> How much domain expertise do end users have in the area the software serves? Higher overlap means users can more easily build or adopt AI alternatives. Example: developers using Atlassian can vibe-code replacements.</p>
-                <p><strong>Small Business Exposure (30% weight):</strong> Does the company primarily serve SMBs or enterprises? SMB-heavy companies face higher disruption risk as small businesses are more willing to switch to cheaper AI-native tools.</p>
-                <p><strong>Standard-Setter Defensibility (25% weight, inverted):</strong> Is the company a de facto standard in its domain? Standard setters (Adobe, Salesforce) have stronger moats. This factor is inverted in the composite: high defensibility reduces disruption risk.</p>
-
-                <h4>Composite Score</h4>
-                <p>Disruption Score = (Domain Expertise * 0.45) + (SMB Exposure * 0.30) + ((10 - Defensibility) * 0.25)</p>
-                <p>Higher score = more vulnerable to AI disruption. The X-axis shows domain expertise overlap, Y-axis shows SMB exposure, dot color indicates defensibility, and dot size reflects the composite disruption score.</p>
-            </div>
-        </details>
-    </div>
 
     <script>
     (async function() {
@@ -249,23 +191,24 @@
             ).toFixed(2)
         }));
 
+        // Categories for filter
         const categories = [...new Set(companies.map(c => c.category))].sort();
-        const categoryColors = {};
-        const palette = [
-            '#6366f1', '#ec4899', '#14b8a6', '#f59e0b', '#ef4444',
-            '#8b5cf6', '#06b6d4', '#84cc16', '#f97316', '#64748b',
-            '#e879f9', '#22d3ee', '#a3e635', '#fb923c', '#94a3b8',
-            '#c084fc', '#2dd4bf'
-        ];
-        categories.forEach((cat, i) => {
-            categoryColors[cat] = palette[i % palette.length];
+        const select = document.getElementById('category-filter');
+        categories.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat;
+            opt.textContent = cat;
+            select.appendChild(opt);
         });
+
+        // Mean score
+        const meanScore = d3.mean(companies, d => d.disruptionScore);
 
         // Dimensions
         const containerWidth = document.getElementById('chart-container').clientWidth;
-        const margin = { top: 30, right: 40, bottom: 60, left: 60 };
+        const margin = { top: 30, right: 30, bottom: 30, left: 70 };
         const width = containerWidth - margin.left - margin.right;
-        const height = Math.min(600, width * 0.65);
+        const height = Math.max(600, Math.min(800, width * 0.9));
 
         const svg = d3.select('#chart-container')
             .append('svg')
@@ -273,122 +216,182 @@
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        // Scales
-        const x = d3.scaleLinear().domain([0, 11]).range([0, width]);
-        const y = d3.scaleLinear().domain([0, 11]).range([height, 0]);
-        const r = d3.scaleSqrt().domain(d3.extent(companies, d => d.disruptionScore)).range([6, 22]);
+        // Y scale: disruption score
+        const yDomain = [2, 8.5];
+        const y = d3.scaleLinear().domain(yDomain).range([height, 0]);
 
-        // Grid
-        svg.append('g').attr('class', 'grid')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).tickSize(-height).tickFormat('').ticks(10));
-
-        svg.append('g').attr('class', 'grid')
-            .call(d3.axisLeft(y).tickSize(-width).tickFormat('').ticks(10));
-
-        // Quadrant zones
-        const zones = [
-            { x: 1.5, y: 9.5, text: 'High Risk: Technical users + SMB market' },
-            { x: 8.5, y: 0.8, text: 'Lower Risk: Technical users + Enterprise' },
-            { x: 1.5, y: 0.8, text: 'Lowest Risk: Non-technical + Enterprise' },
-        ];
-        zones.forEach(z => {
-            svg.append('text')
-                .attr('class', 'zone-label')
-                .attr('x', x(z.x))
-                .attr('y', y(z.y))
-                .text(z.text);
-        });
-
-        // Axes
+        // Y axis
         svg.append('g').attr('class', 'axis')
-            .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x).ticks(10));
+            .call(d3.axisLeft(y).ticks(8).tickSize(-width).tickFormat(d => d.toFixed(1)))
+            .call(g => g.selectAll('.tick line').attr('stroke', '#1a1a2e').attr('stroke-dasharray', '2,4'))
+            .call(g => g.select('.domain').remove());
 
-        svg.append('g').attr('class', 'axis')
-            .call(d3.axisLeft(y).ticks(10));
-
-        // Axis labels
-        svg.append('text')
-            .attr('class', 'axis-label')
-            .attr('x', width / 2)
-            .attr('y', height + 45)
-            .attr('text-anchor', 'middle')
-            .text('Domain Expertise Overlap \u2192 (users can build AI alternatives)');
-
+        // Axis label
         svg.append('text')
             .attr('class', 'axis-label')
             .attr('transform', 'rotate(-90)')
             .attr('x', -height / 2)
-            .attr('y', -45)
+            .attr('y', -50)
             .attr('text-anchor', 'middle')
-            .text('Small Business Exposure \u2192 (higher = more SMB revenue)');
+            .text('Disruption score');
 
-        // Tooltip
-        const tooltip = d3.select('#tooltip');
+        // "Higher likelihood" note
+        svg.append('text')
+            .attr('class', 'axis-note')
+            .attr('x', -60)
+            .attr('y', y(7.8))
+            .text('Higher likelihood of');
+        svg.append('text')
+            .attr('class', 'axis-note')
+            .attr('x', -60)
+            .attr('y', y(7.8) + 14)
+            .text('disruption');
 
-        // Dots
-        const dots = svg.selectAll('.company-dot')
+        // Mean line
+        svg.append('line')
+            .attr('x1', 0)
+            .attr('x2', width)
+            .attr('y1', y(meanScore))
+            .attr('y2', y(meanScore))
+            .attr('stroke', '#555')
+            .attr('stroke-dasharray', '6,4')
+            .attr('stroke-width', 1);
+
+        svg.append('text')
+            .attr('class', 'mean-label')
+            .attr('x', -5)
+            .attr('y', y(meanScore) + 4)
+            .attr('text-anchor', 'end')
+            .text('mean');
+
+        // Bubble properties
+        const bubbleRadius = 8;
+        const bubbleFill = '#9b8ec4';
+        const bubbleStroke = '#7b6ea4';
+
+        // Force simulation — beeswarm
+        const simulation = d3.forceSimulation(companies)
+            .force('y', d3.forceY(d => y(d.disruptionScore)).strength(1))
+            .force('x', d3.forceX(width / 2).strength(0.07))
+            .force('collide', d3.forceCollide(bubbleRadius + 1.5).strength(1))
+            .stop();
+
+        // Run simulation
+        for (let i = 0; i < 300; i++) simulation.tick();
+
+        // Clamp x positions
+        companies.forEach(d => {
+            d.x = Math.max(bubbleRadius, Math.min(width - bubbleRadius, d.x));
+        });
+
+        // Draw bubbles
+        const bubbles = svg.selectAll('.company-bubble')
             .data(companies)
             .enter()
             .append('circle')
-            .attr('class', 'company-dot')
-            .attr('cx', d => x(d.domainExpertiseOverlap))
-            .attr('cy', d => y(d.smallBusinessExposure))
-            .attr('r', d => r(d.disruptionScore))
-            .attr('fill', d => categoryColors[d.category])
-            .attr('fill-opacity', 0.8)
-            .attr('stroke', d => categoryColors[d.category])
-            .attr('stroke-width', 1.5)
-            .attr('stroke-opacity', 0.3)
-            .on('mouseover', function(event, d) {
-                d3.select(this).attr('fill-opacity', 1).attr('stroke-opacity', 1);
-                tooltip.style('opacity', 1).html(`
-                    <h3>${d.name} ${d.ticker !== 'Private' ? '(' + d.ticker + ')' : ''}</h3>
-                    <div class="category">${d.category}</div>
-                    <div class="score-row"><span class="score-label">Domain Expertise Overlap</span><span class="score-value">${d.domainExpertiseOverlap}/10</span></div>
-                    <div class="score-row"><span class="score-label">SMB Exposure</span><span class="score-value">${d.smallBusinessExposure}/10</span></div>
-                    <div class="score-row"><span class="score-label">Standard-Setter Defensibility</span><span class="score-value">${d.standardSetterDefensibility}/10</span></div>
-                    <div class="score-row composite"><span class="score-label">Disruption Score</span><span class="score-value" style="color: ${d.disruptionScore >= 6 ? '#ef4444' : d.disruptionScore >= 4.5 ? '#f59e0b' : '#14b8a6'}">${d.disruptionScore}/10</span></div>
-                    <div class="reasoning">${d.reasoning}</div>
-                `);
-            })
-            .on('mousemove', function(event) {
-                const ttWidth = tooltip.node().offsetWidth;
-                const ttHeight = tooltip.node().offsetHeight;
-                let left = event.pageX + 15;
-                let top = event.pageY - 10;
-                if (left + ttWidth > window.innerWidth - 20) left = event.pageX - ttWidth - 15;
-                if (top + ttHeight > window.innerHeight - 20) top = event.pageY - ttHeight - 10;
-                tooltip.style('left', left + 'px').style('top', top + 'px');
-            })
-            .on('mouseout', function() {
-                d3.select(this).attr('fill-opacity', 0.8).attr('stroke-opacity', 0.3);
-                tooltip.style('opacity', 0);
-            });
+            .attr('class', 'company-bubble')
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y)
+            .attr('r', bubbleRadius)
+            .attr('fill', bubbleFill)
+            .attr('fill-opacity', 0.85)
+            .attr('stroke', bubbleStroke)
+            .attr('stroke-width', 1);
 
-        // Labels
+        // Labels for notable companies (top/bottom scores + some middle)
+        const sorted = [...companies].sort((a, b) => b.disruptionScore - a.disruptionScore);
+        const labelSet = new Set();
+        // Top 8 and bottom 4
+        sorted.slice(0, 8).forEach(d => labelSet.add(d.name));
+        sorted.slice(-4).forEach(d => labelSet.add(d.name));
+        // A few mid-range
+        const mid = sorted.slice(Math.floor(sorted.length / 2) - 2, Math.floor(sorted.length / 2) + 2);
+        mid.forEach(d => labelSet.add(d.name));
+
         svg.selectAll('.company-label')
-            .data(companies)
+            .data(companies.filter(d => labelSet.has(d.name)))
             .enter()
             .append('text')
             .attr('class', 'company-label')
-            .attr('x', d => x(d.domainExpertiseOverlap))
-            .attr('y', d => y(d.smallBusinessExposure) - r(d.disruptionScore) - 4)
+            .attr('x', d => d.x + bubbleRadius + 3)
+            .attr('y', d => d.y + 3)
             .text(d => d.name);
 
-        // Legend
-        const legend = d3.select('#legend');
-        legend.append('span').attr('class', 'legend-title').text('Category:');
-        categories.forEach(cat => {
-            const item = legend.append('span').attr('class', 'legend-item');
-            item.append('span').attr('class', 'legend-swatch')
-                .style('background', categoryColors[cat]);
-            item.append('span').text(cat);
+        // Tooltip
+        const tooltip = d3.select('#tooltip');
+        let pinnedCompany = null;
+
+        function showTooltip(event, d) {
+            const scoreColor = d.disruptionScore >= 6 ? '#ef4444' : d.disruptionScore >= 4.5 ? '#f59e0b' : '#14b8a6';
+            tooltip.html(`
+                <h3>${d.name} ${d.ticker !== 'Private' ? '(' + d.ticker + ')' : ''}</h3>
+                <div class="category">${d.category}</div>
+                <div class="score-row"><span class="score-label">Domain Expertise Overlap</span><span class="score-value">${d.domainExpertiseOverlap}/10</span></div>
+                <div class="score-row"><span class="score-label">SMB Exposure</span><span class="score-value">${d.smallBusinessExposure}/10</span></div>
+                <div class="score-row"><span class="score-label">Standard-Setter Defensibility</span><span class="score-value">${d.standardSetterDefensibility}/10</span></div>
+                <div class="score-row composite"><span class="score-label">Disruption Score</span><span class="score-value" style="color: ${scoreColor}">${d.disruptionScore}/10</span></div>
+                <div class="reasoning">${d.reasoning}</div>
+            `);
+
+            const ttNode = tooltip.node();
+            const ttWidth = 300;
+            let left = event.pageX + 15;
+            let top = event.pageY - 10;
+            if (left + ttWidth > window.innerWidth - 20) left = event.pageX - ttWidth - 15;
+            if (top + 200 > window.innerHeight - 20) top = event.pageY - 200;
+            tooltip.style('left', left + 'px').style('top', top + 'px');
+        }
+
+        // Click to pin tooltip
+        bubbles.on('click', function(event, d) {
+            event.stopPropagation();
+            if (pinnedCompany === d) {
+                pinnedCompany = null;
+                tooltip.classed('pinned', false).style('opacity', 0);
+                return;
+            }
+            pinnedCompany = d;
+            showTooltip(event, d);
+            tooltip.classed('pinned', true).style('opacity', 1);
         });
 
-        // Size legend
-        legend.append('span').attr('class', 'legend-title').style('margin-left', '1.5rem').text('Dot size = Disruption Score');
+        // Hover for non-pinned
+        bubbles.on('mouseover', function(event, d) {
+            if (!pinnedCompany) {
+                showTooltip(event, d);
+                tooltip.style('opacity', 1);
+            }
+        }).on('mousemove', function(event) {
+            if (!pinnedCompany) {
+                const ttWidth = tooltip.node().offsetWidth;
+                let left = event.pageX + 15;
+                let top = event.pageY - 10;
+                if (left + ttWidth > window.innerWidth - 20) left = event.pageX - ttWidth - 15;
+                tooltip.style('left', left + 'px').style('top', top + 'px');
+            }
+        }).on('mouseout', function() {
+            if (!pinnedCompany) {
+                tooltip.style('opacity', 0);
+            }
+        });
+
+        // Click elsewhere to dismiss pinned tooltip
+        d3.select('body').on('click', function() {
+            pinnedCompany = null;
+            tooltip.classed('pinned', false).style('opacity', 0);
+        });
+
+        // Category filter
+        select.addEventListener('change', function() {
+            const val = this.value;
+            if (val === 'All') {
+                bubbles.attr('fill-opacity', 0.85);
+                svg.selectAll('.company-label').attr('opacity', 1);
+            } else {
+                bubbles.attr('fill-opacity', d => d.category === val ? 0.9 : 0.12);
+                svg.selectAll('.company-label').attr('opacity', d => d.category === val ? 1 : 0.15);
+            }
+        });
     })();
     </script>
 </body>
