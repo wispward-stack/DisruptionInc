@@ -1,0 +1,318 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "date": "2026-04-02",
+    "methodology": {
+      "description": "Each SaaS company is scored on three disruption factors (1-10 scale). The composite Disruption Score is a weighted average.",
+      "factors": {
+        "domainExpertiseOverlap": {
+          "weight": 0.45,
+          "description": "How much domain expertise do end users have in the area the software serves? Higher = users can more easily build AI alternatives. 10 = users are developers/technical experts who could vibe-code replacements. 1 = users have no technical ability to create alternatives.",
+          "examples": "Atlassian (9): devs use it and can build alternatives. Veeva (2): pharma compliance users lack software skills."
+        },
+        "smallBusinessExposure": {
+          "weight": 0.30,
+          "description": "What fraction of revenue comes from small businesses vs enterprises? Higher = more SMB exposure = higher disruption risk (SMBs more likely to switch to AI-native tools). 10 = almost entirely SMB. 1 = almost entirely large enterprise.",
+          "examples": "Squarespace (9): mostly small businesses. Workday (2): large enterprises."
+        },
+        "standardSetterDefensibility": {
+          "weight": 0.25,
+          "description": "Is the company a de facto standard in its domain? Higher = more defensible = LOWER disruption risk. Score is inverted for the composite: 10 = strong standard setter (low risk), 1 = no standard-setting power (high risk).",
+          "examples": "Adobe (9): Creative Suite is the standard. Freshworks (2): competes in crowded space with no standard-setting power."
+        }
+      },
+      "compositeFormula": "disruptionScore = (domainExpertiseOverlap * 0.45) + (smallBusinessExposure * 0.30) + ((10 - standardSetterDefensibility) * 0.25)",
+      "interpretation": "Higher composite score = more vulnerable to AI disruption. Range: 1-10."
+    }
+  },
+  "companies": [
+    {
+      "name": "Atlassian",
+      "ticker": "TEAM",
+      "category": "Dev Tools / Project Management",
+      "domainExpertiseOverlap": 9,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 6,
+      "reasoning": "End users are developers who can build alternatives. Mix of SMB and enterprise. Jira is a near-standard but alternatives exist."
+    },
+    {
+      "name": "Salesforce",
+      "ticker": "CRM",
+      "category": "CRM",
+      "domainExpertiseOverlap": 4,
+      "smallBusinessExposure": 3,
+      "standardSetterDefensibility": 9,
+      "reasoning": "Sales reps aren't builders. Heavily enterprise. CRM category leader and platform standard."
+    },
+    {
+      "name": "Adobe",
+      "ticker": "ADBE",
+      "category": "Creative Tools",
+      "domainExpertiseOverlap": 6,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 9,
+      "reasoning": "Designers are creative but not coders. Mixed customer base. Photoshop/Illustrator are the standard."
+    },
+    {
+      "name": "Shopify",
+      "ticker": "SHOP",
+      "category": "E-commerce Platform",
+      "domainExpertiseOverlap": 5,
+      "smallBusinessExposure": 9,
+      "standardSetterDefensibility": 7,
+      "reasoning": "Merchants are business-savvy but not technical. Heavily SMB. Strong brand but Wix/Squarespace compete."
+    },
+    {
+      "name": "Workday",
+      "ticker": "WDAY",
+      "category": "HR / Finance ERP",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 1,
+      "standardSetterDefensibility": 7,
+      "reasoning": "HR users aren't technical. Almost entirely large enterprise. Strong position in enterprise HCM."
+    },
+    {
+      "name": "ServiceNow",
+      "ticker": "NOW",
+      "category": "IT Service Management",
+      "domainExpertiseOverlap": 7,
+      "smallBusinessExposure": 2,
+      "standardSetterDefensibility": 8,
+      "reasoning": "IT admins are technical. Very enterprise-heavy. ITSM standard in large orgs."
+    },
+    {
+      "name": "Datadog",
+      "ticker": "DDOG",
+      "category": "Observability",
+      "domainExpertiseOverlap": 9,
+      "smallBusinessExposure": 4,
+      "standardSetterDefensibility": 6,
+      "reasoning": "DevOps engineers are highly technical. Mix but enterprise-leaning. Strong but Grafana/New Relic compete."
+    },
+    {
+      "name": "Snowflake",
+      "ticker": "SNOW",
+      "category": "Data Warehouse",
+      "domainExpertiseOverlap": 8,
+      "smallBusinessExposure": 3,
+      "standardSetterDefensibility": 6,
+      "reasoning": "Data engineers are very technical. Enterprise-heavy. Strong but Databricks/BigQuery compete."
+    },
+    {
+      "name": "HubSpot",
+      "ticker": "HUBS",
+      "category": "Marketing / CRM",
+      "domainExpertiseOverlap": 5,
+      "smallBusinessExposure": 8,
+      "standardSetterDefensibility": 5,
+      "reasoning": "Marketers are savvy but not builders. SMB-focused. Strong in SMB CRM but not a standard."
+    },
+    {
+      "name": "Twilio",
+      "ticker": "TWLO",
+      "category": "Communications API",
+      "domainExpertiseOverlap": 10,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 6,
+      "reasoning": "Users are developers building on the API. Mixed customer base. Leading API but competitors exist."
+    },
+    {
+      "name": "Zoom",
+      "ticker": "ZM",
+      "category": "Video Conferencing",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 6,
+      "standardSetterDefensibility": 6,
+      "reasoning": "End users are non-technical. Broad customer base. Well-known but Teams/Meet compete hard."
+    },
+    {
+      "name": "Cloudflare",
+      "ticker": "NET",
+      "category": "Edge / Security",
+      "domainExpertiseOverlap": 9,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 7,
+      "reasoning": "DevOps/infra engineers are highly technical. Mix of SMB and enterprise. Strong edge platform."
+    },
+    {
+      "name": "MongoDB",
+      "ticker": "MDB",
+      "category": "Database",
+      "domainExpertiseOverlap": 10,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 6,
+      "reasoning": "Users are developers. Mixed customer base. Popular but Postgres/DynamoDB compete."
+    },
+    {
+      "name": "Figma",
+      "ticker": "Private",
+      "category": "Design Tools",
+      "domainExpertiseOverlap": 5,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 7,
+      "reasoning": "Designers creative but not coders. Mixed base. Becoming the design collaboration standard."
+    },
+    {
+      "name": "Notion",
+      "ticker": "Private",
+      "category": "Productivity / Docs",
+      "domainExpertiseOverlap": 6,
+      "smallBusinessExposure": 7,
+      "standardSetterDefensibility": 4,
+      "reasoning": "Tech-savvy users but not all builders. SMB-leaning. Popular but Google Docs/Confluence compete."
+    },
+    {
+      "name": "Canva",
+      "ticker": "Private",
+      "category": "Design / Marketing",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 9,
+      "standardSetterDefensibility": 5,
+      "reasoning": "Non-designers using templates. Very SMB. Strong brand but AI image tools are direct competitors."
+    },
+    {
+      "name": "Squarespace",
+      "ticker": "SQSP",
+      "category": "Website Builder",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 9,
+      "standardSetterDefensibility": 4,
+      "reasoning": "Non-technical users building websites. Almost all SMB. No standard-setting power."
+    },
+    {
+      "name": "GitLab",
+      "ticker": "GTLB",
+      "category": "DevOps Platform",
+      "domainExpertiseOverlap": 10,
+      "smallBusinessExposure": 4,
+      "standardSetterDefensibility": 5,
+      "reasoning": "Pure developer tool. Mix but enterprise-leaning. Competes with GitHub."
+    },
+    {
+      "name": "Veeva Systems",
+      "ticker": "VEEV",
+      "category": "Life Sciences CRM",
+      "domainExpertiseOverlap": 2,
+      "smallBusinessExposure": 1,
+      "standardSetterDefensibility": 9,
+      "reasoning": "Pharma/biotech compliance users aren't technical. All enterprise. Dominant in life sciences vertical."
+    },
+    {
+      "name": "Palantir",
+      "ticker": "PLTR",
+      "category": "Data Analytics / Defense",
+      "domainExpertiseOverlap": 6,
+      "smallBusinessExposure": 1,
+      "standardSetterDefensibility": 8,
+      "reasoning": "Analysts are semi-technical. Government/enterprise only. Deep moat in defense/intel."
+    },
+    {
+      "name": "Freshworks",
+      "ticker": "FRSH",
+      "category": "Customer Service / ITSM",
+      "domainExpertiseOverlap": 4,
+      "smallBusinessExposure": 8,
+      "standardSetterDefensibility": 2,
+      "reasoning": "Support agents aren't builders. SMB-heavy. No standard-setting power, crowded market."
+    },
+    {
+      "name": "Asana",
+      "ticker": "ASAN",
+      "category": "Project Management",
+      "domainExpertiseOverlap": 5,
+      "smallBusinessExposure": 6,
+      "standardSetterDefensibility": 3,
+      "reasoning": "Mixed user base, some technical. Mid-market focus. Competes with Monday, Jira, Notion."
+    },
+    {
+      "name": "DocuSign",
+      "ticker": "DOCU",
+      "category": "E-Signature",
+      "domainExpertiseOverlap": 2,
+      "smallBusinessExposure": 5,
+      "standardSetterDefensibility": 8,
+      "reasoning": "Users just sign documents. Mixed base. De facto e-signature standard."
+    },
+    {
+      "name": "Okta",
+      "ticker": "OKTA",
+      "category": "Identity / Access Management",
+      "domainExpertiseOverlap": 8,
+      "smallBusinessExposure": 3,
+      "standardSetterDefensibility": 7,
+      "reasoning": "IT/security admins are technical. Enterprise-heavy. Strong in identity space."
+    },
+    {
+      "name": "Monday.com",
+      "ticker": "MNDY",
+      "category": "Work Management",
+      "domainExpertiseOverlap": 4,
+      "smallBusinessExposure": 7,
+      "standardSetterDefensibility": 3,
+      "reasoning": "Non-technical project managers. SMB-leaning. No standard-setting power."
+    },
+    {
+      "name": "Elastic",
+      "ticker": "ESTC",
+      "category": "Search / Observability",
+      "domainExpertiseOverlap": 9,
+      "smallBusinessExposure": 4,
+      "standardSetterDefensibility": 6,
+      "reasoning": "Developers and DevOps engineers. Enterprise-leaning. Elasticsearch is well-known but open-source competitors exist."
+    },
+    {
+      "name": "Wix",
+      "ticker": "WIX",
+      "category": "Website Builder",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 9,
+      "standardSetterDefensibility": 4,
+      "reasoning": "Non-technical small business owners. Almost all SMB. No standard-setting power."
+    },
+    {
+      "name": "Zendesk",
+      "ticker": "ZEN",
+      "category": "Customer Support",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 6,
+      "standardSetterDefensibility": 5,
+      "reasoning": "Support agents aren't technical. Mixed base. Known brand but AI chatbots are direct competitors."
+    },
+    {
+      "name": "Confluent",
+      "ticker": "CFLT",
+      "category": "Data Streaming",
+      "domainExpertiseOverlap": 10,
+      "smallBusinessExposure": 2,
+      "standardSetterDefensibility": 7,
+      "reasoning": "Pure developer/data engineer tool. Enterprise-heavy. Kafka is the standard but self-hosted is an option."
+    },
+    {
+      "name": "UiPath",
+      "ticker": "PATH",
+      "category": "RPA / Automation",
+      "domainExpertiseOverlap": 5,
+      "smallBusinessExposure": 3,
+      "standardSetterDefensibility": 5,
+      "reasoning": "Business analysts with some technical skill. Enterprise-heavy. RPA leader but AI agents are direct replacements."
+    },
+    {
+      "name": "Intuit",
+      "ticker": "INTU",
+      "category": "Accounting / Tax",
+      "domainExpertiseOverlap": 3,
+      "smallBusinessExposure": 9,
+      "standardSetterDefensibility": 8,
+      "reasoning": "Small business owners and individuals. Very SMB. QuickBooks/TurboTax are standards."
+    },
+    {
+      "name": "Autodesk",
+      "ticker": "ADSK",
+      "category": "CAD / Engineering",
+      "domainExpertiseOverlap": 6,
+      "smallBusinessExposure": 4,
+      "standardSetterDefensibility": 9,
+      "reasoning": "Engineers are technical but in physical domains. Mixed base. AutoCAD/Revit are industry standards."
+    }
+  ]
+}
