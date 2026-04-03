@@ -204,14 +204,15 @@
             select.appendChild(opt);
         });
 
-        // Mean score
+        // Mean values for quadrant lines
         const meanScore = d3.mean(companies, d => d.disruptionScore);
+        const meanPressure = d3.mean(companies, d => d.aiCompetitorPressure);
 
         // Dimensions
         const containerWidth = document.getElementById('chart-container').clientWidth;
-        const margin = { top: 30, right: 30, bottom: 30, left: 70 };
+        const margin = { top: 30, right: 30, bottom: 70, left: 70 };
         const width = containerWidth - margin.left - margin.right;
-        const height = Math.max(600, Math.min(800, width * 0.9));
+        const height = Math.max(500, Math.min(700, width * 0.8));
 
         const svg = d3.select('#chart-container')
             .append('svg')
@@ -219,11 +220,14 @@
             .append('g')
             .attr('transform', `translate(${margin.left},${margin.top})`);
 
-        // Y scale: disruption score (dynamic domain from actual data with padding)
+        // Y scale: disruption score
         const scoreExtent = d3.extent(companies, d => d.disruptionScore);
         const scorePad = (scoreExtent[1] - scoreExtent[0]) * 0.15;
         const yDomain = [Math.max(0, scoreExtent[0] - scorePad), scoreExtent[1] + scorePad];
         const y = d3.scaleLinear().domain(yDomain).range([height, 0]);
+
+        // X scale: AI Competitor Pressure (1-10)
+        const x = d3.scaleLinear().domain([0.5, 10.5]).range([0, width]);
 
         // Y axis
         svg.append('g').attr('class', 'axis')
@@ -231,7 +235,14 @@
             .call(g => g.selectAll('.tick line').attr('stroke', '#1a1a2e').attr('stroke-dasharray', '2,4'))
             .call(g => g.select('.domain').remove());
 
-        // Axis label
+        // X axis
+        svg.append('g').attr('class', 'axis')
+            .attr('transform', `translate(0,${height})`)
+            .call(d3.axisBottom(x).ticks(10).tickSize(-height).tickFormat(d => d))
+            .call(g => g.selectAll('.tick line').attr('stroke', '#1a1a2e').attr('stroke-dasharray', '2,4'))
+            .call(g => g.select('.domain').remove());
+
+        // Y axis label
         svg.append('text')
             .attr('class', 'axis-label')
             .attr('transform', 'rotate(-90)')
@@ -244,29 +255,52 @@
         svg.append('text')
             .attr('class', 'axis-note')
             .attr('x', -60)
-            .attr('y', y(7.8))
-            .text('Higher likelihood of');
+            .attr('y', y(scoreExtent[1]) + 10)
+            .text('Higher likelihood');
         svg.append('text')
             .attr('class', 'axis-note')
             .attr('x', -60)
-            .attr('y', y(7.8) + 14)
-            .text('disruption');
+            .attr('y', y(scoreExtent[1]) + 24)
+            .text('of disruption');
 
-        // Mean line
+        // X axis label
+        svg.append('text')
+            .attr('class', 'axis-label')
+            .attr('x', width / 2)
+            .attr('y', height + 45)
+            .attr('text-anchor', 'middle')
+            .text('AI Competitor Pressure');
+
+        // X axis note
+        svg.append('text')
+            .attr('class', 'axis-note')
+            .attr('x', width / 2)
+            .attr('y', height + 62)
+            .attr('text-anchor', 'middle')
+            .text('Active AI threat today →');
+
+        // Quadrant lines — horizontal mean (disruption score)
         svg.append('line')
-            .attr('x1', 0)
-            .attr('x2', width)
-            .attr('y1', y(meanScore))
-            .attr('y2', y(meanScore))
-            .attr('stroke', '#555')
-            .attr('stroke-dasharray', '6,4')
-            .attr('stroke-width', 1);
+            .attr('x1', 0).attr('x2', width)
+            .attr('y1', y(meanScore)).attr('y2', y(meanScore))
+            .attr('stroke', '#555').attr('stroke-dasharray', '6,4').attr('stroke-width', 1);
 
         svg.append('text')
             .attr('class', 'mean-label')
-            .attr('x', -5)
-            .attr('y', y(meanScore) + 4)
+            .attr('x', -5).attr('y', y(meanScore) + 4)
             .attr('text-anchor', 'end')
+            .text('mean');
+
+        // Quadrant lines — vertical mean (AI Competitor Pressure)
+        svg.append('line')
+            .attr('x1', x(meanPressure)).attr('x2', x(meanPressure))
+            .attr('y1', 0).attr('y2', height)
+            .attr('stroke', '#555').attr('stroke-dasharray', '6,4').attr('stroke-width', 1);
+
+        svg.append('text')
+            .attr('class', 'mean-label')
+            .attr('x', x(meanPressure) + 4)
+            .attr('y', height + 14)
             .text('mean');
 
         // Bubble properties
@@ -274,19 +308,25 @@
         const bubbleFill = '#9b8ec4';
         const bubbleStroke = '#7b6ea4';
 
-        // Force simulation — beeswarm
+        // Initialize positions at true data coordinates
+        companies.forEach(d => {
+            d.x = x(d.aiCompetitorPressure);
+            d.y = y(d.disruptionScore);
+        });
+
+        // Light force-collide to nudge overlapping bubbles — keeps them near true position
         const simulation = d3.forceSimulation(companies)
-            .force('y', d3.forceY(d => y(d.disruptionScore)).strength(1))
-            .force('x', d3.forceX(width / 2).strength(0.07))
-            .force('collide', d3.forceCollide(bubbleRadius + 1.5).strength(1))
+            .force('x', d3.forceX(d => x(d.aiCompetitorPressure)).strength(0.8))
+            .force('y', d3.forceY(d => y(d.disruptionScore)).strength(0.8))
+            .force('collide', d3.forceCollide(bubbleRadius + 1.5).strength(0.6))
             .stop();
 
-        // Run simulation
         for (let i = 0; i < 300; i++) simulation.tick();
 
-        // Clamp x positions
+        // Clamp positions within plot area
         companies.forEach(d => {
             d.x = Math.max(bubbleRadius, Math.min(width - bubbleRadius, d.x));
+            d.y = Math.max(bubbleRadius, Math.min(height - bubbleRadius, d.y));
         });
 
         // Draw bubbles
@@ -306,10 +346,8 @@
         // Labels for notable companies (top/bottom scores + some middle)
         const sorted = [...companies].sort((a, b) => b.disruptionScore - a.disruptionScore);
         const labelSet = new Set();
-        // Top 8 and bottom 4
         sorted.slice(0, 8).forEach(d => labelSet.add(d.name));
         sorted.slice(-4).forEach(d => labelSet.add(d.name));
-        // A few mid-range
         const mid = sorted.slice(Math.floor(sorted.length / 2) - 2, Math.floor(sorted.length / 2) + 2);
         mid.forEach(d => labelSet.add(d.name));
 
@@ -341,7 +379,6 @@
                 <div class="reasoning">${d.reasoning}</div>
             `);
 
-            const ttNode = tooltip.node();
             const ttWidth = 300;
             let left = event.pageX + 15;
             let top = event.pageY - 10;
